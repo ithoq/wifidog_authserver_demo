@@ -1,0 +1,85 @@
+@charset "gb2312";
+/* 
+BY£º5qq
+QQ£º20822
+qun£º538434
+ */
+
+* {margin:0;padding:0;}
+body {font:14px/1.5 "Microsoft YaHei","Î¢ÈíÑÅºÚ"; color:#999;background:url(../img/bg.png);/* ±³¾° */
+}
+
+
+a{ color:#999; text-decoration:none;}
+a:hover{ color:#c00; text-decoration:underline;}
+
+
+.login-btn { background:url(../img/btn.png) no-repeat;}
+.user-text,.password-text{ background:url(../img/pic.png) no-repeat;}
+
+/* µÇÂ¼¿ò */
+.login-mod{margin:0 auto;padding:6px 20px; width:290px; position: relative;}
+.login-mod label.tips {color: #999999;  font: 16px/18px "Microsoft YaHei","Î¢ÈíÑÅºÚ"; position: absolute; top: 27px; left: 60px;}
+.login-mod h3{ margin:0 0 17px; padding:5px 0; font:18px/28px "Microsoft YaHei","Î¢ÈíÑÅºÚ";}
+.login-mod p{ margin:0 0 0 -10px; padding:15px 0 0; color:#ccc; font:14px/26px "Microsoft YaHei","Î¢ÈíÑÅºÚ"; }
+.login-mod p a{ margin:0 10px; color:#999;}
+.user-text, .password-text{    border: 0 none;  color: #999999;  font: 16px/18px "Microsoft YaHei","Î¢ÈíÑÅºÚ";  height: 18px; margin: 3px 0 0;  padding: 17px 0 17px 40px;  width: 250px;} 
+.user-text{ background-position:0 -160px;}
+.password-text{ background-position:0 -266px;}
+.user-text-click{ background-position:0 -213px;}
+.password-text-click{ background-position:0 -319px;}
+.login-btn{ margin:10px 0 0; width:287px; height:38px; background-position:0 -264px; border:0 none; cursor:pointer;}
+.login-btn:hover{ background-position:0 -303px;}
+
+.button{padding:5px;}
+
+
+
+/*  CSS3¶¯Ì¬±³¾°
+@-webkit-keyframes animate-cloud {
+  from {
+    background-position: 600px 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@-moz-keyframes animate-cloud {
+  from {
+    background-position: 600px 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@-ms-keyframes animate-cloud {
+  from {
+    background-position: 600px 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+@-o-keyframes animate-cloud {
+  from {
+    background-position: 600px 100%;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+
+html{
+	height: 100%;
+}
+body{
+   background:url(../img/cloud.png) 0 bottom repeat-x  #049ec4;
+  -webkit-animation: animate-cloud 20s linear infinite;
+  -moz-animation: animate-cloud 20s linear infinite;
+  -ms-animation: animate-cloud 20s linear infinite;
+  -o-animation: animate-cloud 20s linear infinite;
+  animation: animate-cloud 20s linear infinite;
+  width: 100%;
+  height: auto;
+}
+×¢ÊÍ´úÂë½áÊø */

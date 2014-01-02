@@ -1,0 +1,39 @@
+@charset "gb2312";
+* {margin:0;padding:0;}
+body {font:14px/1.5 "Microsoft YaHei","Î¢ÈíÑÅºÚ"; color:#BEBEBE;
+}
+
+/* µÇÂ¼¿ò */
+.login-mod{
+	margin:0 auto;
+	padding:6px 20px; 
+	width:290px; 
+	position: relative;
+}
+.user-text{
+	height: 30px;
+	margin-top: 5px;
+	margin-left: 6%;
+	width: 88%;
+	color:#BEBEBE;
+	font-size:12px;
+} 
+
+.login-btn{ 
+	margin-top: 10px;
+	margin-left: 6%; 
+	width:89%; 
+	height:38px;  
+	border:0 none; 
+	cursor:pointer;
+	background:#df070f ;
+	color:#FFFFFF;
+	font-size:14px;
+}
+.login-btn:hover{ background:#f15056;}
+.p-comment{
+	margin-top: 10px;
+	font-size:12px;
+}
+
+
