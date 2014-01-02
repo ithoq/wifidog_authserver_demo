@@ -12,3 +12,8 @@ wifidog 认证服务器的基本demo，配合官方的wifidog 及v1 协议使用
   
   
   
+  
+  反馈问题请加qq群：331230369 ，验证：github
+  
+  
+  
