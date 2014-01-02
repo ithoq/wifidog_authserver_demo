@@ -18,9 +18,10 @@ class Wifidog extends CI_Controller {
 		parent::__construct();
 		//获取user_agent将来对客户端进行限定		
 		$temp_str = $this->input->user_agent() ;
-		//log_message($this->config->item('MY_log_threshold'), __CLASS__.__FUNCTION__.'user agent:'.$temp_str);
-		if(!(!empty($temp_str) and $temp_str == 'WiFiDog 20131017'))
-			$this->valid_agent = false;
+		
+		
+		//if(!(!empty($temp_str) and $temp_str == 'WiFiDog 20131017'))
+		//	$this->valid_agent = false;
         
 		//根据 http user_agent 判断访问者的设备类型，主要用在login，及portal接口上
 		$this->is_mobile = isMobile();			
@@ -111,9 +112,9 @@ class Wifidog extends CI_Controller {
 			           
 			//服务器验证页面
 			if($this->is_mobile)
-				$this->load->view('model1/login_mobile_1',$data);
+				$this->load->view('model1/wifidog_login_mobile',$data);
 			else
-				$this->load->view('model1/login_pc_1',$data);
+				$this->load->view('model1/wifidog_login_pc',$data);
        	}
 		else
 		{
@@ -130,9 +131,10 @@ class Wifidog extends CI_Controller {
 				//不成功仍旧返回登录页面
 				$data[$debug] = '登录失败';
                 if($this->is_mobile)
-                    $this->load->view('model1/login_mobile_1',$data);
+                    //$this->load->view('model1/wifidog_login_mobile',$data);
+					$this->load->view('model1/wifidog_login_mobile',$data);
                 else
-                    $this->load->view('model1/login_pc_1',$data);
+                    $this->load->view('model1/wifidog_login_pc',$data);
 			}
 		}
 	}	

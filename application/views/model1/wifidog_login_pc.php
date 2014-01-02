@@ -22,7 +22,7 @@
 	<body>
 		<div id="container">
           
-			<?php echo form_open( "http://".$_SERVER ['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']); ?>
+			<?php echo form_open( "http://".$_SERVER ['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'],array('id'=>'myform')); ?>
 		
             
                 <input type="hidden" name="gw_address" value="<?php echo empty($gw_address)?'':$gw_address;?>">
