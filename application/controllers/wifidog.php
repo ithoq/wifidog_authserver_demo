@@ -153,9 +153,8 @@ class Wifidog extends CI_Controller {
 		2. mac
 		3. token（login页面下发的token）
 		4.incoming 下载流量
-		5.outgoing 上传流量
-		6.gw_id 
-		7.stage  认证阶段，就两种 login 和 auth
+		5.outgoing 上传流量 
+		6.stage  认证阶段，就两种 login 和 counters
 		*/
 		//做一个简单的流量判断验证，下载流量超值时，返回下线通知，否则保持在线
 		if(!empty($_GET['incoming']) and $_GET['incoming'] > 10000000)
@@ -164,6 +163,18 @@ class Wifidog extends CI_Controller {
 		}else{
 			echo "Auth: 1\n";			
 		}
+		/*
+		返回值：主要有这两种就够了
+		0 - 拒绝
+		1 - 放行
+		
+		官方文档如下
+		0 - AUTH_DENIED - User firewall users are deleted and the user removed.
+		6 - AUTH_VALIDATION_FAILED - User email validation timeout has occured and user/firewall is deleted（用户邮件验证超时，防火墙关闭该用户）
+		1 - AUTH_ALLOWED - User was valid, add firewall rules if not present
+		5 - AUTH_VALIDATION - Permit user access to email to get validation email under default rules （用户邮件验证时，向用户开放email）
+		-1 - AUTH_ERROR - An error occurred during the validation process
+		*/
 	}
 	/**
      * portal 跳转接口
@@ -188,11 +199,17 @@ class Wifidog extends CI_Controller {
     {
         if (isset($_REQUEST["message"])) {
             switch ($_REQUEST["message"]) {
-                case 'failed_validation': //认证失败，请重新认证                    
+                case 'failed_validation': 
+				//auth的stage为login时，被服务器返回AUTH_VALIDATION_FAILED时，来到该处处理
+				//认证失败，请重新认证                    
                     break;                    
-                case 'denied': //认证被拒
+                case 'denied':
+				//auth的stage为login时，被服务器返回AUTH_DENIED时，来到该处处理
+				//认证被拒
                     break;                    
-                case 'activate': //认证成功
+                case 'activate': 
+				//auth的stage为login时，被服务器返回AUTH_VALIDATION时，来到该处处理
+				//待激活
                     break;
                 default:
                     break;
