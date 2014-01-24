@@ -156,13 +156,28 @@ class Wifidog extends CI_Controller {
 		5.outgoing 上传流量 
 		6.stage  认证阶段，就两种 login 和 counters
 		*/
-		//做一个简单的流量判断验证，下载流量超值时，返回下线通知，否则保持在线
-		if(!empty($_GET['incoming']) and $_GET['incoming'] > 10000000)
-		{
-			echo "Auth: 0";
-		}else{
-			echo "Auth: 1\n";			
+		
+		
+		$stage = $_GET['stage'] == 'counters'?'counters':'login';
+		if($stage == 'login')
+        {
+			//跳过login 阶段的处理
 		}
+		else if($stage == 'counters')
+		{
+		
+			//做一个简单的流量判断验证，下载流量超值时，返回下线通知，否则保持在线
+			if(!empty($_GET['incoming']) and $_GET['incoming'] > 10000000)
+			{
+				echo "Auth: 0";
+			}else{
+				echo "Auth: 1\n";			
+			}
+		}
+		else
+			echo "Auth: 0"; //其他情况都返回拒绝
+			
+			
 		/*
 		返回值：主要有这两种就够了
 		0 - 拒绝
