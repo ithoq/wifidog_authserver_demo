@@ -161,7 +161,9 @@ class Wifidog extends CI_Controller {
 		$stage = $_GET['stage'] == 'counters'?'counters':'login';
 		if($stage == 'login')
         {
-			//跳过login 阶段的处理
+			//XXXX跳过login 阶段的处理XXXX不能随便跳过的
+			//默认返回 允许
+			echo "Auth: 1";
 		}
 		else if($stage == 'counters')
 		{
