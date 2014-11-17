@@ -331,7 +331,6 @@ $config['compress_output'] = FALSE;
 */
 $config['time_reference'] = 'local';
 
-
 /*
 |--------------------------------------------------------------------------
 | Rewrite PHP Short Tags
@@ -343,7 +342,6 @@ $config['time_reference'] = 'local';
 |
 */
 $config['rewrite_short_tags'] = FALSE;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -358,16 +356,13 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-
 /*
 |--------------------------------------------------------------------------
-|自定义的配置防止在此位置
+| Custom configuration prevents this location
 |--------------------------------------------------------------------------
-|自定义配置全部使用 MY_ 作为前缀
+| Custom configuration MY_ all use as a prefix
 |
 */
-
-
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

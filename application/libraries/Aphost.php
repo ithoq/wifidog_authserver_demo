@@ -1,67 +1,63 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed'); 
 
 /**
-*   热点ap类
+* Host AP Classes
 */
 class Aphost {
-    //属性
-    //状态
+    // property
+    // status
     public $user_cnt=0;
     public $max_user_cnt=10;
-    //信息
-    public $name='' ;       //名称
-    public $type='';        //类型
-    public $license='';     //序列号
+    // Information
+    public $name='' ;           // name
+    public $type='';            // type
+    public $license='';         // serial number
     
-    public $ip='';          //外网ip
-    public $created_date='';//创建日期
-    public $login_count=''; //登录次数
-    public $last_rsync_date=''; //最后同步日期
-    public $remark='';      //热点描述
+    public $ip='';              // external network ip
+    public $created_date='';    // Created Date
+    public $login_count='';     // logins
+    public $last_rsync_date=''; // last synchronization date
+    public $remark='';          // hotspot description
     
-    //内部私有变量
+    // internal private variables
     private $ap_id;
     
     /**
-     * 初始化函数，传递必要的参数
+     * Initialization function, passing the necessary parameters
      */
     public function __construct($params)
     {
         // Do something with $params
         if(!empty($params['ap_id']))
-            $this->ap_id = $params['ap_id'];        //ID为从数据库获取id的唯一途径
+            $this->ap_id = $params['ap_id'];        // ID is the only way to get the id from the database
         if(!empty($params['license']))
-            $this->$license = $params['license'];   //license为确认物理设备的唯一标志
+            $this->$license = $params['license'];   // license for confirmation only sign of physical devices
     }
     
     /**
-     * 创建新的ap （数据库操作）
+     * Create a new ap (database operations)
      */
     public function create()
     {
-        //主要做条件判断
-        
-        //数据库model 操作
+        // main job conditional
+        // database model operation
     }
     
     /**
-     * 删除ap
+     * Delete AP
      */
     public function del($ap_id)
     {
-        //条件判断
-        
-        //数据库model 操作
-        
+        // conditional
+        // database model operation
     }
     
     
     /**
-     * 更新状态
+     * Update Status
      */
     public function update()
     {
         
     }
-    
 }

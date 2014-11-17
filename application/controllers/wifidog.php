@@ -1,250 +1,240 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /**
-	wifidog 接口控制类
-	
-	为了说明wifidog参数传递方式，没有采用CI的input类的参数获取方式
-	
- */
+    wifidog interface control classes
+    To illustrate wifidog parameter passing mode, did not use the input parameter CI classes acquisition mode
+*/
 class Wifidog extends CI_Controller {
     private $is_mobile = false;
-	private $valid_agent = true;
+    private $valid_agent = true;
 	
     /**
-     * 构造函数
+     * Constructor
      */
-	function __construct()
-	{
-		parent::__construct();
-		//获取user_agent将来对客户端进行限定		
-		$temp_str = $this->input->user_agent() ;
-		
-		
-		//if(!(!empty($temp_str) and $temp_str == 'WiFiDog 20131017'))
-		//	$this->valid_agent = false;
-        
-		//根据 http user_agent 判断访问者的设备类型，主要用在login，及portal接口上
-		$this->is_mobile = isMobile();			
-	}
-	/**
-     * 默认页面
+    function __construct()
+    {
+        parent::__construct();
+        // Get the client user_agent limited future
+        $temp_str = $this->input->user_agent() ;
+
+        //if(!(!empty($temp_str) and $temp_str == 'WiFiDog 20131017'))
+        //	$this->valid_agent = false;
+
+        // http user_agent judgment based on the visitor's device type, mainly used in the login, and portal interfaces
+        $this->is_mobile = isMobile();			
+    }
+    /**
+     * Default Page
      */
-	public function index()
-	{
-		//显示空白，或者显示给普通访问者的页面
-		echo "hello,wifidog!";
-	}
+    public function index()
+    {
+        // display a blank, or display a page to ordinary visitors
+        echo "hello,wifidog!";
+    }
 	
-	/**
-     * ping心跳连接处理接口，wifidog会按照配置文件的间隔时间，定期访问这个接口，以确保认证服务器“健在”！
+    /**
+     * Ping heartbeat connection processing interface, wifidog will follow the interval profiles, regular visits to this interface, in order to ensure the authentication server "alive"!
      */
-	public function ping()
-	{
-		if(!$this->valid_agent)
-			return;
-		//url请求 "gw_id=$gw_id&sys_uptime=$sys_uptime&sys_memfree=$sys_memfree&sys_load=$sys_load&wifidog_uptime=$wifidog_uptime";
-		//log_message($this->config->item('MY_log_threshold'), __CLASS__.':'.__FUNCTION__.':'.debug_printarray($_GET));
-		
-		//判断各种参数是否为空
-		if( !(isset($_GET['gw_id']) and isset($_GET['sys_uptime']) and isset($_GET['sys_memfree']) and isset($_GET['sys_load']) and isset($_GET['wifidog_uptime']) ) )
-		{
-			echo '{"error":"2"}';
-			return;
-		}
-		//添加心跳日志处理功能
-		/*
-		此处可获取 wififog提供的 如下参数
-		1.gw_id  来自wifidog 配置文件中，用来区分不同的路由设备
-		2.sys_uptime 路由器的系统启动时间
-		3.sys_memfree 系统内存使用百分比
-		4.wifidog_uptime wifidog持续运行时间（这个数据经常会有问题）		
-		*/
-		
-		//返回值
-		echo 'Pong';
-	}
-	
-	/**
-     * 认证用户登录页面
-	 * 该页面用来用各种方式（用户名名、密码，随机码，微博，微信，qq，手机号码等）判定使用者的身份！
-	 * 
-	 * 认证后要做的事情：	1.认证不通过，还是继续回到该页面（大不要丢掉刚开始wifidog传递上来的参数）
-	 *						2.通过认证：根据wifidog的参数，做页面重定向						
-	 *
-	 * 目前该页面采用了最简单的用户名、密码登录方式
+    public function ping()
+    {
+        if(!$this->valid_agent)
+            return;
+        // url request "gw_id = $ gw_id & sys_uptime = $ sys_uptime & sys_memfree = $ sys_memfree & sys_load = $ sys_load & wifidog_uptime = $ wifidog_uptime";
+        // log_message ($ this-> config-> Item ('MY_log_threshold'), __CLASS __ ':' .__ FUNCTION __ ':' debug_printarray ($ _ GET)...);
+
+        // determine whether the various parameters is empty
+        if( !(isset($_GET['gw_id']) and isset($_GET['sys_uptime']) and isset($_GET['sys_memfree']) and isset($_GET['sys_load']) and isset($_GET['wifidog_uptime']) ) )
+        {
+            echo '{"error":"2"}';
+            return;
+        }
+
+        // add heartbeat log processing functions
+        /*
+        Here you can get the following parameters provided wififog
+        1. gw_id  from wifidog configuration file, used to distinguish between different routing devices
+        2. sys_uptime router system startup time
+        3. sys_memfree percentage of system memory use
+        4. wifidog_uptime wifidog uptime (this data is often a problem)
+        */
+    
+        // return value
+        echo 'Pong';
+    }
+    
+    /**
+     * Authentication user login page
+     * This page is used to determine the user's identity in various ways (user name names, passwords, random code, microblogging, letter, qq, phone number, etc.)!
+     * 
+     * After the certification to do:
+     * 1. authentication fails, or continue to return to this page (do not lose big to pass up the beginning wifidog parameters)
+     * 2. Certification: According wifidog parameters do page redirects
+     *
+     * Currently the page using the most simple user name and password login
      */
-	public function login()
-	{	
-		session_start();
-		$this->form_validation->set_rules('username', 'Title', 'required');
-		$this->form_validation->set_rules('password', 'text', 'required');
-        
-		/*
-		wifidog 带过来的参数主要有
-		1.gw_id
-		2.gw_address wifidog状态的访问地址
-		3.gw_port 	wifidog状态的访问端口
-		4.url 		被重定向的url（用户访问的url）
-		
-		*/	
-		
-		if ($this->form_validation->run() === FALSE)
-		{
-			
-			if(!empty($_GET))
-			{
-				
-				$data['gw_address'] = $_GET['gw_address'];
-				$data['gw_port'] = $_GET['gw_port'];
-				$data['gw_id'] = $_GET['gw_id'];
-				$data['url'] = $_GET['url'];				
-				$_SESSION['url'] = $_GET['url'];
-				$_SESSION['gw_port'] = $_GET['gw_port'];
-				$_SESSION['gw_address'] = $_GET['gw_address'];
-				
-			}else{
-				$data['gw_address'] = '';
-				$data['gw_port'] = '';
-				$data['gw_id'] = '';
-				$data['url'] = '';	
-			}
-			$data['form_url'] = base_url('wifidog/login');
-			           
-			//服务器验证页面
-			if($this->is_mobile)
-				$this->load->view('model1/wifidog_login_mobile',$data);
-			else
-				$this->load->view('model1/wifidog_login_pc',$data);
-       	}
-		else
-		{
-			//用户登录校验		
-			
-			//认证用户，此处直接跳过，不过校验
-			if(true)
-			//if( $this->input->post('username') ==='ApFree' and $this->input->post('password') === 'apfree')
-			{
-				//登录成功重定向到wifidog指定的gw
-				//附带一个随机生成的token参数（md5），这个作为服务器认定客户的唯一标记
-				redirect('http://'.$_SESSION['gw_address'].':'.$_SESSION['gw_port'].'/wifidog/auth?token='.md5(uniqid(rand(), 1)).'&url='.$_SESSION['url'], 'location', 302);
-			}else{
-				//不成功仍旧返回登录页面
-				$data[$debug] = '登录失败';
+    public function login()
+    {	
+        session_start();
+        $this->form_validation->set_rules('username', 'Title', 'required');
+        $this->form_validation->set_rules('password', 'text', 'required');
+       
+        /*
+        Parameters wifidog brought over mainly
+        1.gw_id
+        2.gw_address wifidog Access address state
+        3.gw_port 	 wifidog Access Port state
+        4.url 	 redirected url (user access url)
+        */	
+        if ($this->form_validation->run() === FALSE)
+        {
+            if(!empty($_GET))
+            {
+                $data['gw_address'] = $_GET['gw_address'];
+                $data['gw_port'] = $_GET['gw_port'];
+                $data['gw_id'] = $_GET['gw_id'];
+                $data['url'] = $_GET['url'];				
+                $_SESSION['url'] = $_GET['url'];
+                $_SESSION['gw_port'] = $_GET['gw_port'];
+                $_SESSION['gw_address'] = $_GET['gw_address'];
+            }else{
+                $data['gw_address'] = '';
+                $data['gw_port'] = '';
+                $data['gw_id'] = '';
+                $data['url'] = '';	
+            }
+            $data['form_url'] = base_url('wifidog/login');
+    
+            // server authentication page
+            if($this->is_mobile)
+                $this->load->view('model1/wifidog_login_mobile',$data);
+            else
+                $this->load->view('model1/wifidog_login_pc',$data);
+        } else {
+            // user login validation
+            // authenticate the user, skip here, but check
+            if(true)
+            //if( $this->input->post('username') ==='ApFree' and $this->input->post('password') === 'apfree')
+            {
+                // successful login redirects to wifidog designated gw
+                // comes with a randomly generated token parameter (md5), this only as a server client identification mark
+                redirect('http://'.$_SESSION['gw_address'].':'.$_SESSION['gw_port'].'/wifidog/auth?token='.md5(uniqid(rand(), 1)).'&url='.$_SESSION['url'], 'location', 302);
+            }else{
+                // returns still unsuccessful login page
+                $data[$debug] = '登录失败';
                 if($this->is_mobile)
-                    //$this->load->view('model1/wifidog_login_mobile',$data);
-					$this->load->view('model1/wifidog_login_mobile',$data);
+                //$this->load->view('model1/wifidog_login_mobile',$data);
+                    $this->load->view('model1/wifidog_login_mobile',$data);
                 else
                     $this->load->view('model1/wifidog_login_pc',$data);
-			}
-		}
-	}	
-	/**
-     * 认证接口
-     */
-	public function auth()
-	{
-		if(!$this->valid_agent)
-			return;
-		//响应客户端的定时认证，可在此处做各种统计、计费等等
-		/*
-		wifidog 会通过这个接口传递连接客户端的信息，然后根据返回，对客户端做开通、断开等处理，具体返回值可以看wifidog的文档
-		wifidog主要提交如下参数
-		1.ip
-		2. mac
-		3. token（login页面下发的token）
-		4.incoming 下载流量
-		5.outgoing 上传流量 
-		6.stage  认证阶段，就两种 login 和 counters
-		*/
-		
-		
-		$stage = $_GET['stage'] == 'counters'?'counters':'login';
-		if($stage == 'login')
-        {
-			//XXXX跳过login 阶段的处理XXXX不能随便跳过的
-			//默认返回 允许
-			echo "Auth: 1";
-		}
-		else if($stage == 'counters')
-		{
-		
-			//做一个简单的流量判断验证，下载流量超值时，返回下线通知，否则保持在线
-			if(!empty($_GET['incoming']) and $_GET['incoming'] > 10000000)
-			{
-				echo "Auth: 0";
-			}else{
-				echo "Auth: 1\n";			
-			}
-		}
-		else
-			echo "Auth: 0"; //其他情况都返回拒绝
-			
-			
-		/*
-		返回值：主要有这两种就够了
-		0 - 拒绝
-		1 - 放行
-		
-		官方文档如下
-		0 - AUTH_DENIED - User firewall users are deleted and the user removed.
-		6 - AUTH_VALIDATION_FAILED - User email validation timeout has occured and user/firewall is deleted（用户邮件验证超时，防火墙关闭该用户）
-		1 - AUTH_ALLOWED - User was valid, add firewall rules if not present
-		5 - AUTH_VALIDATION - Permit user access to email to get validation email under default rules （用户邮件验证时，向用户开放email）
-		-1 - AUTH_ERROR - An error occurred during the validation process
-		*/
-	}
-	/**
-     * portal 跳转接口
-     */
-	public function portal()
-	{
-		/*
-			wifidog 带过来的参数 如下
-			1. gw_id
-		*/
-		
-		//重定到指定网站 或者 显示splash广告页面		
-		redirect('http://www.baidu.com', 'location', 302);
-			
-	}
-    
-    
+            }
+        }
+    }	
+
     /**
-     * wifidog 的gw_message 接口，信息提示页面
-	 *
-	 *------------------------------------------------------------------------------------
-	 * 注：虽然此接口被用到的机会很少，但是这里有个问题需要说明下
-	 * wifidog程序访问该接口的url为  /xxx/gw_message.php?message=XXX
-	 * 这个是原版wifidog于其他4个接口风格很不一致的地方，导致了使用其他非php服务器端的问题
-	 * 并且如果采php的CI框架，也有访问上的问题（其他框架就不知道了）
-	 * 只能通过特殊的url重定向规则等外部配置才能实现该接口的访问
-	 *
-	 * apfree 的wifidog客户端(apfree_wifidog_v2)会修复该问题，将其修改为 /xxx/gw_message/?message=XXX 的格式访问
-	 *------------------------------------------------------------------------------------
+    * Certified Interface
+    */
+    public function auth()
+    {
+        if(!$this->valid_agent)
+        return;
+        // response timing authentication client can do all kinds of statistics, billing, etc. here
+        /*
+        wifidog will pass through this interface to connect the client information, 
+        and then returned to the client to do the opening, disconnection and other treatment,
+        the return value can be seen wifidog specific documents
+        wifidog submit the following main parameters
+        1. ip
+        2. mac
+        3. token (issued under the login page token)
+        4. incoming download traffic
+        5. outgoing upload traffic
+        6. stage  certification stage, two kinds of login and counters
+        */
+        $stage = $_GET['stage'] == 'counters'?'counters':'login';
+        if($stage == 'login')
+        {
+            // XXXX XXXX login skip processing stage can not just skip
+            // default return allowed
+            echo "Auth: 1";
+        }
+        else if($stage == 'counters')
+        {
+            // make a simple judgment verification flow, the flow value when downloading, offline notification is returned, otherwise stay online
+            if(!empty($_GET['incoming']) and $_GET['incoming'] > 10000000)
+            {
+                echo "Auth: 0";
+            } else {
+                echo "Auth: 1\n";			
+            }
+        }
+        else
+           echo "Auth: 0"; // otherwise return refused
+    
+    
+        /*
+        Return Value: There are enough of these two
+        0 - refused
+        1 - Release
+    
+        The official document as follows
+        0 - AUTH_DENIED - User firewall users are deleted and the user removed.
+        6 - AUTH_VALIDATION_FAILED - User email validation timeout has occured and user/firewall is deleted (mail user authentication timeout, the firewall closes the user)
+        1 - AUTH_ALLOWED - User was valid, add firewall rules if not present
+        5 - AUTH_VALIDATION - Permit user access to email to get validation email under default rules(mail user authentication, users open email)
+        -1 - AUTH_ERROR - An error occurred during the validation process
+        */
+    }
+
+    /**
+    * portal Jump interface
+    */
+    public function portal()
+    {
+        /*
+        wifidog brought over the following parameters
+        1. gw_id
+        */
+
+        // redirect to the specified website or display advertising splash page
+        redirect('http://www.baidu.com', 'location', 302);
+    }
+
+    /**
+     * wifidog of gw_message interface, information tips page
+     *
+     *------------------------------------------------------------------------------------
+     * Note: Although this interface is seldom used, but there is a need to explain the problem under
+     * Wifidog url to access the interface for /xxx/gw_message.php?message=XXX
+     * This is the original wifidog the other four interface style is very inconsistencies, leading to the use of other non-php server issue
+     * And if mining CI php framework, there are problems accessing on (other frameworks do not know)
+     * Access to the interface can only be achieved through a special url redirection rules and other external configuration to
+     *
+     * apfree of wifidog client (apfree_wifidog_v2) will fix the problem, change it to /xxx/gw_message/?message=XXX format visit
+     *------------------------------------------------------------------------------------
      */
     function gw_message()
     {
         if (isset($_REQUEST["message"])) {
             switch ($_REQUEST["message"]) {
                 case 'failed_validation': 
-				//auth的stage为login时，被服务器返回AUTH_VALIDATION_FAILED时，来到该处处理
-				//认证失败，请重新认证                    
+                    // auth the stage for the login, the server returns when AUTH_VALIDATION_FAILED, came to where the handle
+                    // authentication fails, please re-certification
                     break;                    
                 case 'denied':
-				//auth的stage为login时，被服务器返回AUTH_DENIED时，来到该处处理
-				//认证被拒
+                    // auth the stage for the login, the server returns when AUTH_DENIED, came to where the handle
+                    // denied certification
                     break;                    
                 case 'activate': 
-				//auth的stage为login时，被服务器返回AUTH_VALIDATION时，来到该处处理
-				//待激活
+                    // auth the stage for the login, the server returns when AUTH_VALIDATION, came to where the handle
+                    // to be activated
                     break;
                 default:
                     break;
             }
-        }else{
-            //不回显任何信息
+        } else {
+            // do not echo any information
         }
     }
+
 }
 
 /* End of file wifidog.php */

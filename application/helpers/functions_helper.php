@@ -7,11 +7,11 @@ if ( ! function_exists('isMobile'))
             return true;
         }
         if(isset ($_SERVER['HTTP_VIA'])) {
-            //找不到为flase,否则为true
+            // can not be found for false, otherwise true
             return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
         }
         if(isset($_SERVER['HTTP_USER_AGENT'])) {
-            //此数组有待完善
+            // This array needs to be improved
             $clientkeywords = array (
             'nokia',
             'sony',
@@ -46,17 +46,16 @@ if ( ! function_exists('isMobile'))
             'wap',
             'mobile'
             );
-            // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+            // Find the phone browser HTTP_USER_AGENT keywords
             if(preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
                 return true;
             }
-     
         }
      
-        //协议法，因为有可能不准确，放到最后判断
+        // Agreements Act, because there may not be accurate, put the final judgment
         if (isset ($_SERVER['HTTP_ACCEPT'])) {
-            // 如果只支持wml并且不支持html那一定是移动设备
-            // 如果支持wml和html但是wml在html之前则是移动设备
+            // If you support only and does not support html wml it must be mobile devices
+            // If the support wml wml and html but before the html is a mobile device
             if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
                 return true;
             }
@@ -64,5 +63,4 @@ if ( ! function_exists('isMobile'))
          
         return false;
     }    
-    
 }

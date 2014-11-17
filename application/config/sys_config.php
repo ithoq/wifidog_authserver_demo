@@ -1,31 +1,31 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- *	自己定义的bug级别，快速调整所有调试的开关
+ * Bug levels define yourself, quickly adjust all debugging switch
  */
 $config['MY_log_threshold'] = 'error';
 /**
- * 是否验证wifidog的user-agent
+ * Verify that the user-agent wifidog
  */
 $config['MY_check_useragent'] = false;
 /**
- *是否开启路由器本地认证
+ * Turn on the router whether the local authentication
  */
 $config['MY_local_auth'] = true;
 /**
- *登录页面是否在路由器
+ * Whether the router login page
  */
 $config['MY_local_login'] = true;
 /**
- * 是否开启路由器本地认证
+ * Turn on the router whether the local authentication
  */
 $config['MY_local_auth'] = false;
 /**
- * 登录页面是否在路由器
+ * Whether the router login page
  */
 $config['MY_local_login'] = false;
 
 /**
- * 是否验证移动客户端的useragent
+ * Verify that the mobile client useragent
  */
 $config['MY_check_mobileagent'] = false;
 
